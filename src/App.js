@@ -1,8 +1,9 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import sg_logo from "./sg_logo.png";
+import {motion} from "framer-motion";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
   const [artists, setArtists] = useState([])
   const [myInfo, setMyInfo] = useState([])
 
+  const spotify_guess = "Spotify Guess"
 
   // content to send chatGPT API
   function artistCountryFrom(artist){  // CITY
@@ -73,7 +75,6 @@ function App() {
     setToken(token)
 
   }, [])
-
 
   const logout = () => {
 
@@ -237,13 +238,22 @@ function App() {
 
         <img className="logo" src={sg_logo}/>
 
-        { !token ? <p></p> :       <button className="myInfo">MyInfo</button>}
+        { !token ? <p></p> :       <button className="myInfo">My Info</button>}
 
       </div>
-      
-      <h1 className="banner">Spotify Guess</h1>
 
-     
+      <motion.div className="spotify_guess">
+          {spotify_guess.split("").map((letter, index) => (
+            <motion.span
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+            >
+              {letter}
+            </motion.span>
+          ))}
+        </motion.div>
 
 
       { !token ? 

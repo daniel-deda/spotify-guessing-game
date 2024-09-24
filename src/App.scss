@@ -1,0 +1,43 @@
+.App{
+  background-color: #253f4b;
+  color: #dcd9cd;
+}
+
+.logo{
+  height: 80px;
+  width: 80px;
+  margin: 15px;
+}
+
+.banner{
+  text-align: center;
+}
+
+.myInfo{
+  height: 50px;
+  width: 80px;
+  margin-top: 30px;
+  position: absolute;
+  right: 0;
+  margin-right: 30px;
+  border: 0;
+  border-radius: 30px;
+  background-color: #1ed760;
+  color: black;
+}
+
+.spotify_guess {
+  padding-top: 70px;
+  font-size: 50px;
+  line-height: 53px;
+  margin: 0;
+  font-weight: 550;
+  text-align: center;
+}
+
+
+
+.logo_myinfo{
+  display: flex;
+  flex-direction: row;
+}
