@@ -1,19 +1,43 @@
 .App{
-  background-color: #253f4b;
+  background-color: black;
   color: #dcd9cd;
 }
 
 .logo{
-  height: 80px;
-  width: 80px;
-  margin: 15px;
+  height: 150px;
+  width: 150px;
+  margin: 15px;  
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 150px;
 }
 
 .banner{
-  text-align: center;
+  display: flex;
+  flex-direction: row;
 }
 
 .myInfo{
+  height: 50px;
+  width: 80px;
+  margin-top: 30px;
+  position: absolute;
+  left: 0;
+  margin-left: 30px;
+  border: 0;
+  border-radius: 30px;
+  background-color: #1ed760;
+  color: black;
+  font-size: 15px;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.login-logout{
   height: 50px;
   width: 80px;
   margin-top: 30px;
@@ -24,20 +48,35 @@
   border-radius: 30px;
   background-color: #1ed760;
   color: black;
+  font-size: 15px;
 }
 
 .spotify_guess {
-  padding-top: 70px;
-  font-size: 50px;
+  font-size: 35px;
   line-height: 53px;
   margin: 0;
   font-weight: 550;
   text-align: center;
+  color:  #1ed760;
+  margin-top: -25px;
+  margin-bottom: 100px;
 }
 
+.about{
+  height: 50px;
+  width: 180px;
+  margin-bottom: 30px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  border: 0;
+  border-radius: 30px;
+  background-color: #1ed760;
+  color: black;
+  font-size: 20px;
+  margin-bottom: 500px;
+}
 
-
-.logo_myinfo{
-  display: flex;
-  flex-direction: row;
+.about_div{
+  padding-bottom: 1px;
 }
