@@ -55,7 +55,6 @@ const MyInfo = () => {
 
       fetchTopArtists("medium_term", 10);
 
-
       setCurrent(1);
 
       console.log(topArtists);
@@ -93,27 +92,26 @@ const MyInfo = () => {
 
         topArtists = data.items;
 
-        console.log(topArtists);
+        console.log(`Top artists= ${topArtists}`);
 
     }
 
     function displayArtists() {
 
-      console.log(topArtists);
-
-      fetchTopArtists("medium_term", 10);
-
-      console.log(topArtists);
-
+      /*
       return (<div className='topArtists'>
 
         <div>
-          <img className="artistImage" src={topArtists.items[0].images[0].url}/>
+          <img className="artistImage" src={topArtists.items[0].images[0].url} alt=""/>
           <h3 className="artistName">{topArtists.items[0].name}</h3>
         </div>
 
 
-    </div>)
+        </div>)
+      */
+        console.log("From displayArtists");
+        console.log(topArtists);
+
     }
 
     function fetchTopTracks() {
@@ -148,6 +146,7 @@ const MyInfo = () => {
           </div>
         )
     }
+    
 
 
 
@@ -156,6 +155,11 @@ const MyInfo = () => {
   <div className="App">
 
     {sendReq}
+    {sendReq}
+    {sendReq}
+    {sendReq}
+    {sendReq}
+
 
     <div className="banner">
 
