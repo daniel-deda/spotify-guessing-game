@@ -17,11 +17,12 @@ const MyInfo = () => {
   const RESPONSE_TYPE = "token"
   let USER_ID = ""
   let button_select = 1
+  let topArtists = []
+
 
   const [token, setToken] = useState("")
 
-  const [current, setCurrent] = useState(1)
-
+  const [current, setCurrent] = useState(2)
 
   const logout = () => {
 
@@ -51,7 +52,17 @@ const MyInfo = () => {
     }, [])
 
     function set1(){
+
+      fetchTopArtists("medium_term", 10);
+
+
       setCurrent(1);
+
+      console.log(topArtists);
+
+    }
+
+    function sendReq(){
       fetchTopArtists("medium_term", 10);
     }
 
@@ -65,9 +76,7 @@ const MyInfo = () => {
 
 
     
-    const fetchTopArtists = async(time, amount) => {
-
-      let topArtists = []
+    async function fetchTopArtists(time, amount) {
  
         const {data} = await axios.get("https://api.spotify.com/v1/me/top/artists", {
     
@@ -82,12 +91,29 @@ const MyInfo = () => {
     
         })
 
-        console.log(data);
-    
-        topArtists = data;
+        topArtists = data.items;
 
         console.log(topArtists);
-    
+
+    }
+
+    function displayArtists() {
+
+      console.log(topArtists);
+
+      fetchTopArtists("medium_term", 10);
+
+      console.log(topArtists);
+
+      return (<div className='topArtists'>
+
+        <div>
+          <img className="artistImage" src={topArtists.items[0].images[0].url}/>
+          <h3 className="artistName">{topArtists.items[0].name}</h3>
+        </div>
+
+
+    </div>)
     }
 
     function fetchTopTracks() {
@@ -128,7 +154,9 @@ const MyInfo = () => {
   return (
     
   <div className="App">
-    
+
+    {sendReq}
+
     <div className="banner">
 
       <div>
@@ -170,11 +198,11 @@ const MyInfo = () => {
         <button className="profile_button" onClick={set3}>Profile</button>
       </div>
       
-      {/*
-      {current === 1 ? fetchTopArtists("medium_term", 10) : <br></br>} 
+      
+      {current === 1 ? displayArtists() : <br></br>} 
       {current === 2 ? fetchTopTracks() : <br></br>} 
-      {current === 3 ? profile() : <br></br>} 
-      */}
+      {current === 3 ? profile() : <br></br>}
+      
 
 
       </div>
