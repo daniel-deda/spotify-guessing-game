@@ -3,10 +3,8 @@ import './MyInfo.scss'
 import sg_logo from '../sg_logo.png'
 import {useEffect, useState} from "react";
 import {motion} from "framer-motion";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-
 
 const MyInfo = () => {
 
@@ -18,11 +16,13 @@ const MyInfo = () => {
   let USER_ID = ""
   let button_select = 1
   let topArtists = []
+  const final = [];
 
+  const navigate = useNavigate();
 
   const [token, setToken] = useState("")
 
-  const [current, setCurrent] = useState(2)
+  const [current, setCurrent] = useState(1)
 
   const logout = () => {
 
@@ -34,6 +34,9 @@ const MyInfo = () => {
   const location = useLocation();
 
   useEffect( () => {
+
+    console.log("FROM USE EFFECT")
+    console.log(location.state)
 
       const hash = window.location.hash
   
@@ -52,17 +55,7 @@ const MyInfo = () => {
     }, [])
 
     function set1(){
-
-      fetchTopArtists("medium_term", 10);
-
       setCurrent(1);
-
-      console.log(topArtists);
-
-    }
-
-    function sendReq(){
-      fetchTopArtists("medium_term", 10);
     }
 
     function set2(){
@@ -73,78 +66,91 @@ const MyInfo = () => {
       setCurrent(3);
     }
 
+    const usingArrayMap = () => {
 
-    
-    async function fetchTopArtists(time, amount) {
- 
-        const {data} = await axios.get("https://api.spotify.com/v1/me/top/artists", {
-    
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-          params: {
-            type: "artists",
-            time_range: time,
-            limit: amount
-          }
-    
-        })
+      console.log(location.state)
 
-        topArtists = data.items;
+      var artists = []
+      artists = JSON.parse(localStorage.getItem('topArtists1'));
 
-        console.log(`Top artists= ${topArtists}`);
+      console.log(artists);
+
+      for(let i = 0; i < 25; i++){
+        final.push(
+          <div className="rows">
+            <p>{i + 1}</p>
+            <img src={artists[i].images[0].url}/>
+            <h3>{artists[i].name}</h3>
+          </div>)
+      }
 
     }
 
     function displayArtists() {
 
-      /*
-      return (<div className='topArtists'>
+      usingArrayMap();
 
-        <div>
-          <img className="artistImage" src={topArtists.items[0].images[0].url} alt=""/>
-          <h3 className="artistName">{topArtists.items[0].name}</h3>
-        </div>
-
-
-        </div>)
-      */
-        console.log("From displayArtists");
-        console.log(topArtists);
+      return <div className='artists'>{final}</div>
 
     }
 
-    function fetchTopTracks() {
+    const usingArrayMapTracks = () => {
 
-      return(
-      
-        <div>
-          <a href={location.state.external_urls.spotify} target="_blank" rel="noopener noreferrer">
-            <button className='go_to_spotify'>Go to Spotify</button>
-          </a>  
-          <p>Followers: {location.state.followers.total}</p>
-          <p>Spotify ID: {location.state.id}</p>
-  
-          <p></p>
-        </div>
-      )
-  }
+      var tracks = []
+      tracks = JSON.parse(localStorage.getItem('topTracks1'));
 
+      console.log("HERE AT TRACKS")
+      console.log(tracks);
+
+      for(let i = 0; i < 25; i++){
+        final.push(
+          <div className="rows">
+            <p>{i + 1}</p>
+            <img src={tracks[i].album.images[0].url}/>
+            <div className='name-track'>
+              <h3>{tracks[i].artists[0].name}</h3>
+              <p>{tracks[i].name}</p>
+            </div>
+          </div>)
+      }
+
+    }
+
+    function displayTracks() {
+
+      usingArrayMapTracks();
+
+      return <div className='tracks'>{final}</div>
+
+    }
 
     function profile() {
 
         return(
         
           <div>
-            <p>Followers: {location.state.followers.total}</p>
-            <p>Spotify ID: {location.state.id}</p>
-            <a href={location.state.external_urls.spotify} target="_blank" rel="noopener noreferrer">
+            <div className='profile_row1'>
+              <h3>Spotify ID</h3>
+              <p>{location.state.dataState[0].id}</p>
+            </div>
+            <div className='profile_row2'>
+              <h3>Followers</h3>
+              <p>{location.state.dataState[0].followers.total}</p>
+            </div>
+           
+            <a href={location.state.dataState[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
               <button className='go_to_spotify'>Go to Spotify</button>
             </a>  
     
             <p></p>
           </div>
         )
+    }
+
+
+    const routeChange = () =>{
+      let path = `/`
+      navigate(path)
     }
     
 
@@ -154,62 +160,69 @@ const MyInfo = () => {
     
   <div className="App">
 
-    {sendReq}
-    {sendReq}
-    {sendReq}
-    {sendReq}
-    {sendReq}
+      <div className="banner">
 
+        <div>
+          { token ? <button className="login-logout" onClick = {logout}>Logout</button> : 
+          <button className="login-logout"><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login</a></button>}
+        </div>
 
-    <div className="banner">
-
-      <div>
-        { token ? <button className="login-logout" onClick = {logout}>Logout</button> : 
-        <button className="login-logout"><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login</a></button>}
-      </div>
-
-      {/* My info button on left*/}
-      <div >
-        { !token ? <p></p> : <button className="myInfo">My Info</button>}
-      </div>  
-
-    </div>
-
-    <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1 }} >
-    <img className="profile_logo" src={`${location.state.images[1].url}`}/>
-    </motion.div>
-
-    <motion.div className="username_display">
-        {location.state.display_name.split("").map((letter, index) => (
-          <motion.span
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.1, delay: index * 0.1 }}
-          >
-            {letter}
-          </motion.span>
-        ))}
-      </motion.div>
-
-
-      <div className="buttons">
-        <button className="top_artists_button" onClick={set1}>Top Artists</button>
-        <button className="top_tracks_button" onClick={set2}>Top Tracks</button>
-        <button className="profile_button" onClick={set3}>Profile</button>
-      </div>
-      
-      
-      {current === 1 ? displayArtists() : <br></br>} 
-      {current === 2 ? fetchTopTracks() : <br></br>} 
-      {current === 3 ? profile() : <br></br>}
-      
-
+        {/* My info button on left*/}
+        <div >
+          <button className="home_button" onClick={routeChange}>Home</button>
+        </div>  
 
       </div>
+
+        {console.log("HERE RN WOW")}
+        {console.log(location)}
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5 }} >
+        <img className="profile_logo" src={`${location.state.dataState[0].images[1].url}`}/>
+        </motion.div>
+
+        <motion.div className="username_display">
+            {location.state.dataState[0].display_name.split("").map((letter, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.1, delay: index * 0.1 }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.div>
+
+
+          <div className="buttons">
+            <button className = {current === 1 ? "clicked_button" : "top_artists_button"} onClick={set1}>Top Artists</button>
+            <button className = {current === 2 ? "clicked_button" :"top_tracks_button"} onClick={set2}>Top Tracks</button>
+            <button className = {current === 3 ? "clicked_button" :"profile_button"} onClick={set3}>Profile</button>
+          </div>
+
+      
+
+        <div className='profile_section'>
+
+          <div className="tuning_buttons">
+        
+          </div>
+
+
+          {current === 1 ? displayArtists() : <br></br>} 
+          {current === 2 ? displayTracks() : <br></br>} 
+          {current === 3 ? profile() : <br></br>}
+        
+        </div>
+
+        </div>
+
+
+
   )
 }
 

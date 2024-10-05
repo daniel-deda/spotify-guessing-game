@@ -4,7 +4,7 @@ import sg_logo from '../sg_logo.png'
 import { useState } from 'react'
 import {motion} from "framer-motion";
 import {useEffect} from "react";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
 const About = () => {
@@ -51,6 +51,15 @@ const About = () => {
       }, [])
     
 
+    const navigate = useNavigate();
+
+
+    const routeChange = () =>{
+      let path = `/my-info`
+      navigate(path)
+    }
+    
+
     
 
 
@@ -67,7 +76,7 @@ const About = () => {
     
             {/* My info button on left*/}
             <div >
-              { !token ? <p></p> : <button className="myInfo">My Info</button>}
+              { !token ? <p></p> : <button className="myInfo" onClick={routeChange}>My Info</button>}
             </div>  
     
           </div>

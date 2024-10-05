@@ -18,6 +18,10 @@ const Home = () => {
     let USER_ID = ""
     let PLAYLIST_1_ID = ""
     let artistArray = []
+    let topArtists = []
+    let topTracks = []
+
+    let dataState = []
 
     const openAI_TOKEN = "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"
     const [token, setToken] = useState("")
@@ -165,7 +169,7 @@ const Home = () => {
     }
   
     
-    const chatGPT = async(e) => {
+  const chatGPT = async(e) => {
   
       let data = JSON.stringify({
               "model": "gpt-4o-2024-05-13",
@@ -197,7 +201,123 @@ const Home = () => {
               .catch((error) => {
                   console.log(error);
               });
+    }
+
+    async function fetchTopArtists3(time, amount) {
+ 
+        const {data} = await axios.get("https://api.spotify.com/v1/me/top/artists", {
+    
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          params: {
+            type: "artists",
+            time_range: time,
+            limit: amount
+          }
+    
+        })
+
+        localStorage.setItem("topArtists3", JSON.stringify(data.items))
+
+    }
+
+    async function fetchTopTracks3(time, amount) {
+ 
+      const {data} = await axios.get("https://api.spotify.com/v1/me/top/tracks", {
+  
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        params: {
+          type: "tracks",
+          time_range: time,
+          limit: amount
+        }
+  
+      })
+
+      localStorage.setItem("topTracks3", JSON.stringify(data.items))
+
+  }
+
+
+  async function fetchTopArtists2(time, amount) {
+ 
+    const {data} = await axios.get("https://api.spotify.com/v1/me/top/artists", {
+
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        type: "artists",
+        time_range: time,
+        limit: amount
       }
+
+    })
+
+    localStorage.setItem("topArtists2", JSON.stringify(data.items))
+
+}
+
+async function fetchTopTracks2(time, amount) {
+
+  const {data} = await axios.get("https://api.spotify.com/v1/me/top/tracks", {
+
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      type: "tracks",
+      time_range: time,
+      limit: amount
+    }
+
+  })
+
+  localStorage.setItem("topTracks2", JSON.stringify(data.items))
+
+}
+
+
+async function fetchTopArtists1(time, amount) {
+ 
+  const {data} = await axios.get("https://api.spotify.com/v1/me/top/artists", {
+
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      type: "artists",
+      time_range: time,
+      limit: amount
+    }
+
+  })
+
+  localStorage.setItem("topArtists1", JSON.stringify(data.items))
+
+}
+
+async function fetchTopTracks1(time, amount) {
+
+const {data} = await axios.get("https://api.spotify.com/v1/me/top/tracks", {
+
+  headers: {
+    Authorization: `Bearer ${token}`
+  },
+  params: {
+    type: "tracks",
+    time_range: time,
+    limit: amount
+  }
+
+})
+
+localStorage.setItem("topTracks1", JSON.stringify(data.items))
+
+}
   
     const searchMyInfo = async(e) => {
   
@@ -213,11 +333,30 @@ const Home = () => {
   
       console.log(data)
       setMyInfo(data)
+
+      dataState.push(data)
   
       USER_ID = data.id;
 
-      navigate('/my-info', {state: data});
-  
+      fetchTopArtists3("long_term", 25);
+      fetchTopTracks3("long_term", 25);
+
+      fetchTopArtists2("medium_term", 25);
+      fetchTopTracks2("medium_term", 25);
+
+      fetchTopArtists1("short_term", 25);
+      fetchTopTracks1("short_term", 25);
+
+      console.log("FROM SEARCH")
+      console.log(dataState);
+      console.log("OUT")
+
+      localStorage.setItem("dataState", dataState);
+
+
+      navigate('/my-info', { state: {dataState} } );
+
+      console.log(dataState)
     }
 
     return (
